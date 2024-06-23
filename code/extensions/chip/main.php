@@ -20,7 +20,8 @@ $models = array(
 $languages = array(
   'storefront' => array(),
   'admin' => array(
-      'chip/chip'));
+    'chip/chip')
+  );
 
 $templates = [
   'storefront' => [],

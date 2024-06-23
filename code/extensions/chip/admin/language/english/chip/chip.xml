@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<definitions>
+  <definition>
+    <key>chip_name</key>
+    <value><![CDATA[CHIP - Digital Finance Platform]]></value>
+  </definition>
+  <definition>
+    <key>chip_api_secret</key>
+    <value><![CDATA[Secret Key<span class="help">This can be retrieved from CHIP Dashboard >> Developer >> Keys.</span>]]></value>
+  </definition>
+  <definition>
+    <key>chip_brand_id</key>
+    <value><![CDATA[Brand ID<span class="help">This can be retrieved from CHIP Dashboard >> Developer >> Brands.</span>]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist</key>
+    <value><![CDATA[Payment Method Whitelist<span class="help">Setting whitelist will only allow specific payment method to be used for payment.</span>]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_fpx</key>
+    <value><![CDATA[FPX (Online Banking)]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_fpx_b2b1</key>
+    <value><![CDATA[FPX B2B1 (Corporate Online Banking)]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_mastercard</key>
+    <value><![CDATA[Mastercard]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_maestro</key>
+    <value><![CDATA[Maestro]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_visa</key>
+    <value><![CDATA[Visa]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_razer_atome</key>
+    <value><![CDATA[Razer Atome]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_razer_grabpay</key>
+    <value><![CDATA[Razer GrabPay]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_razer_maybankqr</key>
+    <value><![CDATA[Razer MaybankQR]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_razer_shopeepay</key>
+    <value><![CDATA[Razer Shopeepay]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_razer_tng</key>
+    <value><![CDATA[Razer TnG]]></value>
+  </definition>
+  <definition>
+    <key>chip_payment_method_whitelist_duitnow_qr</key>
+    <value><![CDATA[Duitnow QR]]></value>
+  </definition>
+  <definition>
+    <key>chip_send_receipt</key>
+    <value><![CDATA[Send Receipt<span class="help">This for CHIP to send receipt directly to customer. Turn off is recommended.</span>]]></value>
+  </definition>
+  <definition>
+    <key>chip_status_success_paid</key>
+    <value><![CDATA[Success<span class="help">This for order status after payment successful. Recommended to set as Processing.</span>]]></value>
+  </definition>
+  <definition>
+    <key>chip_location_id</key>
+    <value><![CDATA[Location:<span class="help">This to enable CHIP only for specific location.</span>]]></value>
+  </definition>
+  <definition>
+    <key>chip_location_id_0</key>
+    <value><![CDATA[All Locations]]></value>
+  </definition>
+  <definition>
+    <key>chip_success_redirect</key>
+    <value><![CDATA[Success Redirect<span class="help">This only meant for troubleshooting purpose. It should be set to Enable on production environment.</span>]]></value>
+  </definition>
+  <definition>
+    <key>chip_success_redirect_0</key>
+    <value><![CDATA[Enable]]></value>
+  </definition>
+  <definition>
+    <key>chip_success_redirect_1</key>
+    <value><![CDATA[Disable]]></value>
+  </definition>
+  <definition>
+    <key>chip_success_callback</key>
+    <value><![CDATA[Success Callback<span class="help">This only meant for troubleshooting purpose. It should be set to Enable on production environment.</span>]]></value>
+  </definition>
+  <definition>
+    <key>chip_success_callback_0</key>
+    <value><![CDATA[Enable]]></value>
+  </definition>
+  <definition>
+    <key>chip_success_callback_1</key>
+    <value><![CDATA[Disable]]></value>
+  </definition>
+  <definition>
+    <key>error_api_secret</key>
+    <value><![CDATA[Secret Key Required!]]></value>
+  </definition>
+    <definition>
+    <key>error_brand_id</key>
+    <value><![CDATA[Brand ID Required!]]></value>
+  </definition>
+</definitions>

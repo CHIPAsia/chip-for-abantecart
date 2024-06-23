@@ -1,0 +1,34 @@
+<?php
+if (! defined ( 'DIR_CORE' )) {
+header ( 'Location: static_pages/' );
+}
+
+$language_list = $this->model_localisation_language->getLanguages();
+
+$rm = new AResourceManager();
+$rm->setType('image');
+
+$result = copy(
+    DIR_EXT.'chip/image/icon.png',
+    DIR_RESOURCE.'image/chip-logo.png'
+);
+
+$resource = [
+    'language_id'   => $this->config->get('storefront_language_id'),
+    'name'          => [],
+    'title'         => [],
+    'description'   => [],
+    'resource_path' => 'chip-logo.png',
+    'resource_code' => '',
+];
+
+foreach ($language_list as $lang) {
+    $resource['name'][$lang['language_id']] = 'chip_icon.jpg';
+    $resource['title'][$lang['language_id']] = 'chip_storefront_icon';
+    $resource['description'][$lang['language_id']] = 'Chip Storefront Icon';
+}
+$resource_id = $rm->addResource($resource);
+
+if ($resource_id) {
+  $settings['chip_storefront_icon'] = $resource_id;
+}

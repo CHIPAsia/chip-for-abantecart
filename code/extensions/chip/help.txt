@@ -1,0 +1,26 @@
+<b>CHIP Payment Configuration</b>
+<br/><br/>
+
+1. To use this extension, you need to have CHIP Collect account.<br/>
+If you do not have CHIP Collect account, please <a href="https://www.chip-in.asia">register for CHIP account</a>. <br/><br/>
+2. Fill in required fields with information provided in CHIP dashboard.<br/>
+
+You can use Test or Live secret key. Secret key determine the mode.
+<b>Important to know!</b>: Test and live mode do not share customers, cards or transaction information. If you switch connection between modes, existing customers and order payment details from prior mode will not be available in new mode.
+
+<br/><br/>
+3. Set up Order Status that will be applied when customer successfully payed with CHIP payment option.<br/><br/>
+4. By default only all payment method is enabled. You can selectively enable payment method in the Whitelisted payment methods. <br />
+
+<br /> Please be aware some payments require minimum order for example FPX minimum is RM 1, FPX B2B1 minimum is RM 2.
+<br /><br />
+5. CHIP payment options will appear at customer's checkout at storefront. You can add custom icon or image in the setting to be displayed to customers.<br/><br/>
+6. To test how CHIP works go to storefront, add products to cart and follow checkout process. CHIP payment options will be available at payment's details page. For testing you, can set secret key from test mode.
+<br />
+<br/>
+<br/><br/>
+
+For more details about CHIP service and details about transactions you need to access CHIP dashboard.  
+<br/><br/>
+
+<a target="_new" href="https://www.chip-in.asia/?refer_from=abantecart">Access CHIP</a>

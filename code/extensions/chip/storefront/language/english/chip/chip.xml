@@ -4,4 +4,8 @@
     <key>text_title</key>
     <value><![CDATA[CHIP - FPX, Credit Card, E-Wallet]]></value>
   </definition>
+  <definition>
+    <key>text_wait</key>
+    <value><![CDATA[Creating Purchase...]]></value>
+  </definition>
 </definitions>

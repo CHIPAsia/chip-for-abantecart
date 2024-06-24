@@ -104,7 +104,7 @@
     <key>error_api_secret</key>
     <value><![CDATA[Secret Key Required!]]></value>
   </definition>
-    <definition>
+  <definition>
     <key>error_brand_id</key>
     <value><![CDATA[Brand ID Required!]]></value>
   </definition>

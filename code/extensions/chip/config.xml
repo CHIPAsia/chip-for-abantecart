@@ -96,17 +96,28 @@
 <help_file><![CDATA[help.txt]]></help_file>
 <note></note>
 <preview>
+  <item>atome.svg</item>
+  <item>card_international_only.png</item>
+  <item>card_international.png</item>
+  <item>card_only.png</item>
+  <item>card.png</item>
+  <item>duitnow_only.svg</item>
+  <item>duitnow.svg</item>
+  <item>ewallet_only.png</item>
+  <item>ewallet.png</item>
+  <item>fpx_b2b1.png</item>
+  <item>fpx_only.png</item>
+  <item>fpx.png</item>
+  <item>paywithchip_all.png</item>
   <item>icon.png</item>
-  <item>preview1.jpg</item>
-  <item>preview2.jpg</item>
 </preview>
 <help_link><![CDATA[https://www.chip-in.asia]]></help_link>
 <install>
-  <!-- <sql>install.sql</sql> -->
+  <sql>install.sql</sql>
   <trigger>install.php</trigger>
 </install>
 <uninstall>
-  <!-- <sql>uninstall.sql</sql> -->
+  <sql>uninstall.sql</sql>
   <trigger>uninstall.php</trigger>
 </uninstall>
 </extension>

@@ -3,25 +3,26 @@ if ( !defined ( 'DIR_CORE' )) {
     header ( 'Location: static_pages/' );
 }
 
-$controllers = array(
-  'storefront' => array(
+$controllers = [
+  'storefront' => [
       // 'responses/extension/chip',
-  ),
-  'admin' => array(),
-);
+  ],
+  'admin' => [],
+];
 
-$models = array(
-  'storefront' => array(
+$models = [
+  'storefront' => [
     'extension/chip',
-  ),
-  'admin' => array(),
-);
+  ],
+  'admin' => [],
+];
 
-$languages = array(
-  'storefront' => array(),
-  'admin' => array(
-    'chip/chip')
-  );
+$languages = [
+  'storefront' => [],
+  'admin' => [
+    'chip/chip'
+  ]
+];
 
 $templates = [
   'storefront' => [],

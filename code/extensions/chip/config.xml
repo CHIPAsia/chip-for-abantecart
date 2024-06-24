@@ -69,7 +69,6 @@
     <item id="chip_timezone">
       <type>selectbox</type>
       <variants>
-        <item>0</item>
         <data_source>
           <model_rt>extension/chip</model_rt>
           <method>getTimezoneList</method>

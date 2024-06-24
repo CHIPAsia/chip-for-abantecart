@@ -18,6 +18,7 @@ function confirmCHIP(e) {
     $.ajax({
         type: 'GET',
         url: '<?php echo $this->html->getSecureURL('r/extension/chip/confirm');?>',
+        dataType: 'json',
         global: false,
         beforeSend: function () {
             $('.alert').remove();
@@ -25,8 +26,18 @@ function confirmCHIP(e) {
                 .hide()
                 .before('<div class="wait alert alert-info text-center"><i class="fa fa-refresh fa-spin"></i> <?php echo $text_wait; ?></div>');
         },
-        success: function () {
-            location = '<?php echo $continue; ?>';
+        success: function (data) {
+            if (data.hasOwnProperty('checkout_url') ) {
+                location = data.checkout_url;
+              } else {
+                alert(data.__all__[0].message);
+                $('.wait').remove();
+                $('.action-buttons').show();
+                try {
+                    resetLockBtn();
+                } catch (e) {
+              }
+            }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert(textStatus + ' ' + errorThrown);

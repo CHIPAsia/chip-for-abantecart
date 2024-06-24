@@ -52,6 +52,10 @@
         <type>checkbox</type>
         <default_value>0</default_value>
     </item>
+    <item id="chip_automatic_currency_conversion">
+        <type>checkbox</type>
+        <default_value>0</default_value>
+    </item>
     <item id="chip_status_success_paid">
       <type>selectbox</type>
       <variants>

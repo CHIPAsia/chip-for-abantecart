@@ -120,4 +120,8 @@
     <key>chip_email_fallback</key>
     <value><![CDATA[Email fallback<span class="help">This to set client email address in the event of email address field is blank.</span>]]></value>
   </definition>
+  <definition>
+    <key>chip_automatic_currency_conversion</key>
+    <value><![CDATA[Automatic currency conversion<span class="help">This to allow CHIP to automatically convert total to MYR in the event of default currency is set to other than MYR. It requires MYR currency to be set and conversion value is depends on AbanteCart configuration.</span>]]></value>
+  </definition>
 </definitions>

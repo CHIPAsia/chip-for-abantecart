@@ -58,10 +58,10 @@ class ControllerResponsesExtensionChip extends AController
         $callback_url = $this->html->getSecureURL('extension/chip/callback_url');
 
         $order_info = $this->model_checkout_order->getOrder($order_id);
-        
+
         $currency = $this->config->get( 'config_currency' );
         $order_total = $order_info['total'];
-        if ( $this->currency->has( 'MYR' ) ) {
+        if ( $this->config->get('chip_automatic_currency_conversion') == '1' AND $this->currency->has( 'MYR' ) ) {
           $order_total = $this->currency->convert($order_total, $currency, 'MYR');
           $currency = 'MYR';
         }

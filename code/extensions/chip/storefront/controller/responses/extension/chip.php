@@ -101,8 +101,8 @@ class ControllerResponsesExtensionChip extends AController
           'platform'         => 'web',
           'purchase' => [
             'total_override' => round( $order_total * 100 ),
-            'due_strict'     => $this->config->get('due_strict') == '1',
-            'timezone'       => 'Asia/Kuala_Lumpur',
+            'due_strict'     => $this->config->get('chip_due_strict') == '1',
+            'timezone'       => $this->config->get('chip_timezone'),
             'currency'       => $currency,
             'products'       => [],
           ],

@@ -18,7 +18,9 @@ $models = [
   'storefront' => [
     'extension/chip',
   ],
-  'admin' => [],
+  'admin' => [
+    'extension/chip',
+  ],
 ];
 
 $languages = [

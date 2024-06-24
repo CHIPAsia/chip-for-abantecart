@@ -82,7 +82,7 @@ class ControllerResponsesExtensionChip extends AController
         $order_info = $this->model_checkout_order->getOrder($order_id);
 
         // Todo: Make switch button to toggle enable/disable automatic conversion
-        $currency = $order_info['currency'];
+        $currency = $this->config->get('config_currency');
         $order_total = $order_info['total'];
         if ( $this->currency->has( 'MYR' ) ) {
           $order_total = $this->currency->convert($order_total, $currency, 'MYR');
@@ -151,8 +151,13 @@ class ControllerResponsesExtensionChip extends AController
             $price = 0;
           }
 
+          $product_name = $product['name'];
+          if ( !empty( $product['sku'] ) ) {
+            $product_name .= ' | ' . $product['sku'];
+          }
+
           $params['purchase']['products'][] = array(
-            'name'     => substr( $product['name'] . ' | ' . $product['sku'], 0, 256 ),
+            'name'     => substr( $product_name, 0, 256 ),
             'price'    => $price,
             'quantity' => $product['quantity']
           );

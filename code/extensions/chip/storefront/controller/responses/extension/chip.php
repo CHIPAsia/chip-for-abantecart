@@ -35,27 +35,6 @@ class ControllerResponsesExtensionChip extends AController
         $this->processTemplate('responses/chip.tpl');
     }
 
-    public function api()
-    {
-        $data = [];
-
-        $data['text_note'] = $this->language->get('text_note');
-        $data['process_rt'] = 'chip/api_confirm';
-
-        $this->load->library('json');
-        $this->response->setOutput(AJson::encode($data));
-    }
-
-    public function api_confirm()
-    {
-        $data = [];
-
-        $this->confirm();
-        $data['success'] = 'completed';
-
-        
-    }
-
     public function confirm()
     {
         $this->load->model('checkout/order');
@@ -71,8 +50,7 @@ class ControllerResponsesExtensionChip extends AController
 
         $order_status = $this->config->get('config_order_status_id');
         $order_id     = $this->session->data['order_id'];
-        // Todo: Make this string translatable
-        $comment      = 'Attempt to create purchase with Brand ID: ' . $brand_id;
+        $comment      = sprintf($this->language->get('order_confirm_comment', 'chip_chip'), $brand_id);
 
         $this->model_checkout_order->confirm($order_id, $order_status, $comment );
 
@@ -189,10 +167,22 @@ class ControllerResponsesExtensionChip extends AController
         $payment = $chip->create_payment($params);
 
         if ( array_key_exists('id', $payment) ) {
+          $this->model_checkout_order->updatePaymentMethodData($order_id, $payment);
+
           $payment = array_intersect_key(
             $payment, 
-            array_flip(['id', 'checkout_url'])
+            array_flip(['id', 'checkout_url', 'is_test'])
           );
+        }
+
+        $purchase_id_comment_text = $this->language->get('purchase_id_comment', 'chip_chip');
+        $purchase_id_comment = sprintf($purchase_id_comment_text, $payment['id']);
+        $this->model_checkout_order->addHistory($order_id, $order_status, $purchase_id_comment);
+
+        if ( $payment['is_test'] ) {
+          $test_mode_comment_text = $this->language->get('test_mode_comment', 'chip_chip');
+          $test_mode_comment = sprintf($test_mode_comment_text, $payment['id']);
+          $this->model_checkout_order->addHistory($order_id, $order_status, $test_mode_comment);
         }
 
         // $this->config->get('chip_status_success_paid')

@@ -8,4 +8,16 @@
     <key>text_wait</key>
     <value><![CDATA[Creating Purchase...]]></value>
   </definition>
+  <definition>
+    <key>order_confirm_comment</key>
+    <value><![CDATA[Attempt to create purchase with Brand ID: %s]]></value>
+  </definition>
+  <definition>
+    <key>purchase_id_comment</key>
+    <value><![CDATA[Purchase successfully created. Purchase ID: %s]]></value>
+  </definition>
+  <definition>
+    <key>test_mode_comment</key>
+    <value><![CDATA[Purchase (%s) is in test mode where it does not involve real payment.]]></value>
+  </definition>
 </definitions>

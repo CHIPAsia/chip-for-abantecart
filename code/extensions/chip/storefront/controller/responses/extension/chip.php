@@ -185,17 +185,15 @@ class ControllerResponsesExtensionChip extends AController
         $chip = ChipApiCurl::get_instance($secret_key, $brand_id);
         $payment = $chip->create_payment($params);
 
-        if ( !array_key_exists('id', $payment) ) {
-          // Response as failed
+        if ( array_key_exists('id', $payment) ) {
+          $payment = array_intersect_key(
+            $payment, 
+            array_flip(['id', 'checkout_url'])
+          );
         }
 
-        $purchase = array_intersect_key(
-          $payment, 
-          array_flip(['id', 'checkout_url'])
-        );
         // $this->config->get('chip_status_success_paid')
-        
         $this->response->addJSONHeader();
-        $this->response->setOutput(AJson::encode($purchase));
+        $this->response->setOutput(AJson::encode($payment));
     }
 }

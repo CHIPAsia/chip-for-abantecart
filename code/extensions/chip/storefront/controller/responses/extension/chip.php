@@ -101,9 +101,7 @@ class ControllerResponsesExtensionChip extends AController
           'platform'         => 'web',
           'purchase' => [
             'total_override' => round( $order_total * 100 ),
-            // Todo: add option for merchant to control due_strict
-            'due_strict'     => false,
-            // Todo: add option for merchant to set timezone
+            'due_strict'     => $this->config->get('due_strict') == '1',
             'timezone'       => 'Asia/Kuala_Lumpur',
             'currency'       => $currency,
             'products'       => [],

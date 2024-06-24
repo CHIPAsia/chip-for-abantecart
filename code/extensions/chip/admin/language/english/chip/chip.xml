@@ -65,6 +65,10 @@
     <value><![CDATA[Send Receipt<span class="help">This for CHIP to send receipt directly to customer. Turn off is recommended.</span>]]></value>
   </definition>
   <definition>
+    <key>chip_due_strict</key>
+    <value><![CDATA[Due Strict<span class="help">This to prevent payment after 1 hour. Turning this off will enable the purchase to be paid anytime.</span>]]></value>
+  </definition>
+  <definition>
     <key>chip_status_success_paid</key>
     <value><![CDATA[Success<span class="help">This for order status after payment successful. Recommended to set as Processing.</span>]]></value>
   </definition>

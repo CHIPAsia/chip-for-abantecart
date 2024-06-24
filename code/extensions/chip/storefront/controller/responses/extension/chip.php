@@ -176,6 +176,7 @@ class ControllerResponsesExtensionChip extends AController
               }
             }
           }
+          $params['payment_method_whitelist'] = $payment_method_whitelist;
         }
 
         // $this->load->model('extension/chip');

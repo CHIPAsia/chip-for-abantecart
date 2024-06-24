@@ -116,4 +116,8 @@
     <key>chip_timezone</key>
     <value><![CDATA[Timezone<span class="help">This settings to ensure purchase timestamp is according to your timezone. Set to Asia/Kuala Lumpur for Malaysia.</span>]]></value>
   </definition>
+  <definition>
+    <key>chip_email_fallback</key>
+    <value><![CDATA[Email fallback<span class="help">This to set client email address in the event of email address field is blank.</span>]]></value>
+  </definition>
 </definitions>

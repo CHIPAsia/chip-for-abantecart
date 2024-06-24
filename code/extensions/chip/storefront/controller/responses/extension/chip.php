@@ -58,8 +58,7 @@ class ControllerResponsesExtensionChip extends AController
         $callback_url = $this->html->getSecureURL('extension/chip/callback_url');
 
         $order_info = $this->model_checkout_order->getOrder($order_id);
-
-        // Todo: Make switch button to toggle enable/disable automatic conversion
+        
         $currency = $this->config->get( 'config_currency' );
         $order_total = $order_info['total'];
         if ( $this->currency->has( 'MYR' ) ) {
@@ -86,7 +85,6 @@ class ControllerResponsesExtensionChip extends AController
           ],
           'brand_id' => $brand_id,
           'client' => [
-            // Todo: add option for merchant to set email fallback
             'email'                   => $order_info['email'],
             'phone'                   => substr( $order_info['telephone'], 0, 32 ),
             'full_name'               => substr( $order_info['payment_firstname'] . ' ' . $order_info['payment_lastname'], 0, 128 ),
@@ -102,6 +100,10 @@ class ControllerResponsesExtensionChip extends AController
             'shipping_state'          => substr( $order_info['shipping_zone'], 0, 128 ),
           ],
         ];
+
+        if ( empty( $params['client']['email'] ) ) {
+          $params['client']['email'] = $this->config->get('chip_email_fallback');
+        }
 
         // Remove empty key pairs
         foreach ( $params['client'] as $key => $value ) {

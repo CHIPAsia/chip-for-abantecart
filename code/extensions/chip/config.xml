@@ -94,6 +94,9 @@
         </fields>
       </variants>
     </item>
+    <item id="chip_email_fallback">
+        <type>input</type>
+    </item>
     <item id="chip_success_redirect">
         <type>selectbox</type>
         <default_value>0</default_value>

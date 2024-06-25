@@ -258,7 +258,6 @@ class ControllerResponsesExtensionChip extends AController
       exit('No supported event type');
     }
 
-    $public_key = 'wire up with action hook to retrieve public key from config';
     $public_key = $this->config->get('chip_public_key');
 
     if ( openssl_verify( $content,  base64_decode($_SERVER['HTTP_X_SIGNATURE']), $public_key, 'sha256WithRSAEncryption' ) != 1 ) {

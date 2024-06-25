@@ -128,4 +128,8 @@
     <key>chip_automatic_currency_conversion</key>
     <value><![CDATA[Automatic currency conversion<span class="help">This to allow CHIP to automatically convert total to MYR in the event of default currency is set to other than MYR. It requires MYR currency to be set and conversion value is depends on AbanteCart configuration. This feature is experimental.</span>]]></value>
   </definition>
+  <definition>
+    <key>chip_public_key</key>
+    <value><![CDATA[Public key<span class="help">This readonly field where it will be automatically populated if the secret key is set correctly.</span>]]></value>
+  </definition>
 </definitions>

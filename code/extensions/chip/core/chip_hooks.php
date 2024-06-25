@@ -134,6 +134,10 @@ class ExtensionChip extends Extension
     }
 
     private function insert_public_key($that) {
+        if ( !isset( $that->request->post['chip_api_secret'] ) ) {
+          return;
+        }
+
         $chip = ChipApiCurl::get_instance($that->request->post['chip_api_secret'], '');
         $public_key = $chip->public_key();
 

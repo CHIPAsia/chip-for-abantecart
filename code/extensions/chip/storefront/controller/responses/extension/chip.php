@@ -241,8 +241,53 @@ class ControllerResponsesExtensionChip extends AController
       redirect($this->html->getNonSecureURL('index/home'));
     }
 
-    // $post = $this->request->post;
+    if ( !isset($_SERVER['HTTP_X_SIGNATURE']) ) {
+      exit('No X Signature received from headers');
+    }
 
-    // $order_info = $this->model_checkout_order->getOrder($order_id);
+    if ( empty($content = file_get_contents('php://input')) ) {
+      exit('No input received');
+    }
+
+    $this->load->library('json');
+    $webhook = AJson::decode($content, true);
+
+    $event_type = $webhook['event_type'];
+
+    if (!in_array($event_type, ['purchase.paid'])) {
+      exit('No supported event type');
+    }
+
+    $public_key = 'wire up with action hook to retrieve public key from config';
+    $public_key = $this->config->get('chip_public_key');
+
+    if ( openssl_verify( $content,  base64_decode($_SERVER['HTTP_X_SIGNATURE']), $public_key, 'sha256WithRSAEncryption' ) != 1 ) {
+      header( 'Forbidden', true, 403 );
+      exit('Invalid X Signature');
+    }
+
+    if ($webhook['status'] != 'paid') {
+      exit('Status is not paid');
+    }
+
+    $order_id = (int)$webhook['reference'];
+    $this->model_extension_chip->get_lock($order_id);
+    $order_info = $this->model_checkout_order->getOrder($order_id);
+    
+    if ($order_info['order_status_id'] == $this->config->get('chip_status_success_paid')) {
+      exit;
+    }
+
+    $this->model_checkout_order->updatePaymentMethodData($order_id, $webhook);
+
+    if ( $webhook['status'] == 'paid' ) {
+      $purchase_paid_comment_text = $this->language->get('purchase_paid_comment', 'chip_chip');
+      $purchase_paid_comment = sprintf($purchase_paid_comment_text, $webhook['id']);
+      
+      $notify_customer = $this->config->get( 'chip_notify_customer_on_success' ) == '1';
+      $this->model_checkout_order->update($order_id, $this->config->get('chip_status_success_paid'), $purchase_paid_comment, $notify_customer);
+
+      $this->model_extension_chip->release_lock($order_id);
+    }
   }
 }

@@ -61,6 +61,10 @@
     <value><![CDATA[Duitnow QR]]></value>
   </definition>
   <definition>
+    <key>chip_notify_customer_on_success</key>
+    <value><![CDATA[Notify customer on success<span class="help">This to invoke notification once order updated to success state. AbanteCart will send email notification to customer.</span>]]></value>
+  </definition>
+  <definition>
     <key>chip_send_receipt</key>
     <value><![CDATA[Send Receipt<span class="help">This for CHIP to send receipt directly to customer. Turn off is recommended.</span>]]></value>
   </definition>

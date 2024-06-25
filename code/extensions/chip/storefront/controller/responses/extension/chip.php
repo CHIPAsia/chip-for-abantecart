@@ -162,9 +162,6 @@ class ControllerResponsesExtensionChip extends AController
           $params['payment_method_whitelist'] = $payment_method_whitelist;
         }
 
-        // $this->load->model('extension/chip');
-        // $this->model_extension_chip->
-
         $chip = ChipApiCurl::get_instance($secret_key, $brand_id);
         $payment = $chip->create_payment($params);
 
@@ -187,8 +184,73 @@ class ControllerResponsesExtensionChip extends AController
           $this->model_checkout_order->addHistory($order_id, $order_status, $test_mode_comment);
         }
 
-        // $this->config->get('chip_status_success_paid')
         $this->response->addJSONHeader();
         $this->response->setOutput(AJson::encode($payment));
     }
+
+  public function redirect_url() {
+    if (!$this->request->is_GET()) {
+      exit('Only accept GET request');
+    }
+
+    $order_id = (int)$this->request->get_or_post('order_id');
+    $success_id = $this->config->get('chip_status_success_paid');
+
+    $this->load->model( 'checkout/order' );
+    $this->load->model( 'extension/chip' );
+    
+    $this->model_extension_chip->get_lock($order_id);
+
+    $order_info = $this->model_checkout_order->getOrder($order_id);
+    if (!$order_info) {
+      return null;
+    }
+
+    if (!has_value($order_info['payment_method_data'])) {
+      return null;
+    }
+
+    if ($order_info['order_status_id'] == $success_id) {
+      if ($this->customer->isLogged()) {
+        redirect($this->html->getSecureURL('checkout/confirm'));
+      } else {
+        redirect($this->html->getSecureURL('checkout/success'));
+      }
+    }
+
+    $payment_method_data = unserialize( $order_info['payment_method_data'] );
+
+    $purchase_id = $payment_method_data['id'];
+    $chip = ChipApiCurl::get_instance( $this->config->get( 'chip_api_secret' ), '' );
+    $payment = $chip->get_payment( $purchase_id );
+    $this->model_checkout_order->updatePaymentMethodData($order_id, $payment);
+
+    if ( $payment['status'] == 'paid' ) {
+      $purchase_paid_comment_text = $this->language->get('purchase_paid_comment', 'chip_chip');
+      $purchase_paid_comment = sprintf($purchase_paid_comment_text, $payment['id']);
+      
+      $notify_customer = $this->config->get( 'chip_notify_customer_on_success' ) == '1';
+      $this->model_checkout_order->update($order_id, $success_id, $purchase_paid_comment, $notify_customer);
+
+      $this->model_extension_chip->release_lock($order_id);
+
+      if ($this->customer->isLogged()) {
+        redirect($this->html->getSecureURL('checkout/confirm'));
+      } else {
+        redirect($this->html->getSecureURL('checkout/success'));
+      }
+    }
+
+    redirect($this->html->getSecureURL('checkout/payment', '&mode=edit', true));
+  }
+
+  public function callback_url() {
+    if ($this->request->is_GET()) {
+      redirect($this->html->getNonSecureURL('index/home'));
+    }
+
+    // $post = $this->request->post;
+
+    // $order_info = $this->model_checkout_order->getOrder($order_id);
+  }
 }

@@ -44,6 +44,10 @@
         </variants>
         <default_value>2</default_value>
     </item>
+    <item id="chip_notify_customer_on_success">
+        <type>checkbox</type>
+        <default_value>1</default_value>
+    </item>
     <item id="chip_send_receipt">
         <type>checkbox</type>
         <default_value>0</default_value>

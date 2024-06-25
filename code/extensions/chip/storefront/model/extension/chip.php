@@ -37,4 +37,12 @@ class ModelExtensionChip extends Model
 
         return $method_data;
     }
+
+    public function get_lock( $order_id ) {
+      $this->db->query( "SELECT GET_LOCK('chip_payment_$order_id', 5);" );
+    }
+
+    public function release_lock( $order_id ) {
+      $this->db->query( "SELECT RELEASE_LOCK('chip_payment_$order_id');" );
+    }
 }

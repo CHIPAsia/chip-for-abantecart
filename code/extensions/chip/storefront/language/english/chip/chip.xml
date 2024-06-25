@@ -20,4 +20,8 @@
     <key>test_mode_comment</key>
     <value><![CDATA[Purchase (%s) is in test mode where it does not involve real payment.]]></value>
   </definition>
+  <definition>
+    <key>purchase_paid_comment</key>
+    <value><![CDATA[Purchase (%s) has been paid.]]></value>
+  </definition>
 </definitions>

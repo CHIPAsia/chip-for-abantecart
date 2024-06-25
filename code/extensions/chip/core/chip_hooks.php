@@ -92,10 +92,10 @@ class ExtensionChip extends Extension
             $view = new AView($this->registry, 0);
             
             $view->assign('order_id', $order_id);
-            $view->assign('test_mode', $payment_method_data['test_mode']);
+            $view->assign('chip_data', $payment_method_data);
+            $view->assign('test_mode', $payment_method_data['is_test']);
             $view->assign('checkout_url', $payment_method_data['checkout_url']);
 
-            $view->batchAssign($that->language->getASet('chip/chip'));
             $this->baseObject->view->addHookVar('extension_payment_details',
                 $view->fetch('pages/sale/chip_payment_details.tpl'));
         }

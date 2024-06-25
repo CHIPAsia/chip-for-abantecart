@@ -109,14 +109,6 @@
     <value><![CDATA[Disable]]></value>
   </definition>
   <definition>
-    <key>error_api_secret</key>
-    <value><![CDATA[Secret Key Required!]]></value>
-  </definition>
-  <definition>
-    <key>error_brand_id</key>
-    <value><![CDATA[Brand ID Required!]]></value>
-  </definition>
-  <definition>
     <key>chip_timezone</key>
     <value><![CDATA[Timezone<span class="help">This settings to ensure purchase timestamp is according to your timezone. Set to Asia/Kuala Lumpur for Malaysia.</span>]]></value>
   </definition>

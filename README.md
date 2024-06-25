@@ -6,7 +6,7 @@ This module adds CHIP payment method option to your AbanteCart shop.
 
 ## Installation
 
-* [Download zip file](https://github.com/CHIPAsia/chip-for-abantecart/archive/refs/heads/main.zip).
+* [Download tar.gz file](https://github.com/CHIPAsia/chip-for-abantecart/archive/refs/heads/main.tar.gz).
 * Log in to your AbanteCart admin panel.
 * Navigate to "**Extensions**" > "**Install Extension**", then click "**Extension Upload**" tab to upload the extension.
 

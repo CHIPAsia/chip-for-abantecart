@@ -121,6 +121,9 @@
             <item>1</item>
         </variants>
     </item>
+    <item id="chip_public_key">
+      <type readonly="true">textarea</type>
+    </item>
 </settings>
 <help_file><![CDATA[help.txt]]></help_file>
 <note></note>

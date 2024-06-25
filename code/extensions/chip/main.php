@@ -7,6 +7,10 @@ if ( !class_exists( 'ChipApiCurl' ) ) {
   require( DIR_EXT.'chip/chip_api_curl.php' );
 }
 
+if ( !class_exists( 'ExtensionChip' ) ) {
+  require_once( DIR_EXT.'chip/core/chip_hooks.php' );
+}
+
 $controllers = [
   'storefront' => [
     'responses/extension/chip',

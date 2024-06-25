@@ -233,7 +233,7 @@ class ControllerResponsesExtensionChip extends AController
       redirect($this->html->getSecureURL('checkout/success'));
     }
 
-    redirect($this->html->getSecureURL('checkout/payment', '&mode=edit', true));
+    redirect($this->html->getSecureURL('checkout/cart', '&mode=edit', true));
   }
 
   public function callback_url() {

@@ -211,11 +211,7 @@ class ControllerResponsesExtensionChip extends AController
     }
 
     if ($order_info['order_status_id'] == $success_id) {
-      if ($this->customer->isLogged()) {
-        redirect($this->html->getSecureURL('checkout/confirm'));
-      } else {
-        redirect($this->html->getSecureURL('checkout/success'));
-      }
+      redirect($this->html->getSecureURL('checkout/success'));
     }
 
     $payment_method_data = unserialize( $order_info['payment_method_data'] );
@@ -234,11 +230,7 @@ class ControllerResponsesExtensionChip extends AController
 
       $this->model_extension_chip->release_lock($order_id);
 
-      if ($this->customer->isLogged()) {
-        redirect($this->html->getSecureURL('checkout/confirm'));
-      } else {
-        redirect($this->html->getSecureURL('checkout/success'));
-      }
+      redirect($this->html->getSecureURL('checkout/success'));
     }
 
     redirect($this->html->getSecureURL('checkout/payment', '&mode=edit', true));

@@ -261,13 +261,20 @@ class ControllerResponsesExtensionChip extends AController
     $public_key = $this->config->get('chip_public_key');
 
     if ( openssl_verify( $content,  base64_decode($_SERVER['HTTP_X_SIGNATURE']), $public_key, 'sha256WithRSAEncryption' ) != 1 ) {
-      header( 'Forbidden', true, 403 );
-      exit('Invalid X Signature');
+      // This verification method cannot be used due to AbanteCart cleaning of $_SERVER variable
+      // header( 'Forbidden', true, 403 );
+      // exit('Invalid X Signature');
     }
+
+    $chip = ChipApiCurl::get_instance( $this->config->get( 'chip_api_secret' ), '' );
+    $webhook = $chip->get_payment( $webhook['id'] );
 
     if ($webhook['status'] != 'paid') {
       exit('Status is not paid');
     }
+
+    $this->load->model( 'checkout/order' );
+    $this->load->model( 'extension/chip' );
 
     $order_id = (int)$webhook['reference'];
     $this->model_extension_chip->get_lock($order_id);

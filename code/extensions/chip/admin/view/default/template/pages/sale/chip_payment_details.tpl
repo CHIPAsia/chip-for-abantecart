@@ -20,6 +20,12 @@
         </td>
       </tr>
       <tr>
+        <td>Status</td>
+        <td>
+          <?php echo ucfirst($chip_data['status']); ?>
+        </td>
+      </tr>
+      <tr>
         <td>Total Paid</td>
         <td><?php echo $chip_data['purchase']['currency'] . ' ' . number_format($chip_data['payment']['amount'] / 100, 2); ?></td>
       </tr>
@@ -34,16 +40,6 @@
         <td>
           <?php echo strtoupper($chip_data['transaction_data']['country']); ?>
         </td>
-      </tr>
-      <tr>
-        <td>Status</td>
-        <td>
-          <?php echo ucfirst($chip_data['status']); ?>
-        </td>
-      </tr>
-      <tr>
-        <td>Total Paid</td>
-        <td><?php echo $chip_data['purchase']['currency'] . ' ' . number_format($chip_data['payment']['amount'] / 100, 2); ?></td>
       </tr>
     </table>
   <?php } ?>

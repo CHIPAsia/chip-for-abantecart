@@ -128,7 +128,9 @@
 <help_file><![CDATA[help.txt]]></help_file>
 <note></note>
 <preview>
-  <item>atome.svg</item>
+  <item>icon.png</item>
+  <item>paywithchip_logo_small.png</item>
+  <item>paywithchip_logo.png</item>
   <item>card_international_only.png</item>
   <item>card_international.png</item>
   <item>card_only.png</item>
@@ -141,7 +143,7 @@
   <item>fpx_only.png</item>
   <item>fpx.png</item>
   <item>paywithchip_all.png</item>
-  <item>icon.png</item>
+  <item>atome.svg</item>
 </preview>
 <help_link><![CDATA[https://www.chip-in.asia]]></help_link>
 <install>

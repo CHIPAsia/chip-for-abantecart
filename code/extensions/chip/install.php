@@ -9,7 +9,7 @@ $rm = new AResourceManager();
 $rm->setType('image');
 
 $result = copy(
-    DIR_EXT.'chip/image/paywithchip_all.png',
+    DIR_EXT.'chip/image/paywithchip_logo_small.png',
     DIR_RESOURCE.'image/chip-paywithchip_all.png'
 );
 

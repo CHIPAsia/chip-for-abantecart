@@ -123,7 +123,14 @@ class ControllerResponsesExtensionChip extends AController
         );
 
         foreach ($order_product_query->rows as $product) {
-          $price = round( $product['price'] * 100 );
+          $currency = $this->config->get( 'config_currency' );
+          $price = $product['price'];
+          if ( $this->config->get('chip_automatic_currency_conversion') == '1' AND $this->currency->has( 'MYR' ) ) {
+            $price = $this->currency->convert($price, $currency, 'MYR');
+            $currency = 'MYR';
+          }
+
+          $price = round( $price * 100 );
           
           if ( $price < 0 ) {
             $price = 0;

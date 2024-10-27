@@ -1,8 +1,8 @@
 <form id="CHIPFrm" action="<?php echo $this->html->getURL('extension/chip/confirm');?>" method="get">
     <div class="form-group action-buttons">
         <div class="col-md-12">
-            <button type="submit" id="checkout_btn" class="btn btn-primary" title="<?php echo $button_confirm->text ?>">
-                <i class="fa fa-check"></i>
+            <button type="submit" id="checkout_btn" class="btn btn-primary fs-5 fw-bold" title="<?php echo $button_confirm->text ?>">
+                <i class="bi bi-check-lg"></i>
                 <?php echo $button_confirm->text; ?>
             </button>
         </div>

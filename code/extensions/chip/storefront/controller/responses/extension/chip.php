@@ -218,7 +218,7 @@ class ControllerResponsesExtensionChip extends AController
     }
 
     if ($order_info['order_status_id'] == $success_id) {
-      redirect($this->html->getSecureURL('checkout/success'));
+      redirect($this->html->getSecureURL('checkout/finalize'));
     }
 
     $payment_method_data = unserialize( $order_info['payment_method_data'] );
@@ -237,10 +237,11 @@ class ControllerResponsesExtensionChip extends AController
 
       $this->model_extension_chip->release_lock($order_id);
 
-      redirect($this->html->getSecureURL('checkout/success'));
+      redirect($this->html->getSecureURL('checkout/finalize'));
     }
 
-    redirect($this->html->getSecureURL('checkout/cart', '&mode=edit', true));
+    $pKey = $this->session->data['fc']['product_key'];
+    redirect($this->html->getSecureURL('checkout/fast_checkout', $pKey ? '&fc=1&product_key='.$pKey : ''));
   }
 
   public function callback_url() {

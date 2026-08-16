@@ -2,6 +2,10 @@
 
 class ControllerResponsesExtensionChip extends AController
 {
+    const DUITNOW_GROUP = array( 'duitnow_qr', 'dnqr' );
+
+    private $resolved_dnqr_group = array();
+
     public function main()
     {
 
@@ -166,7 +170,11 @@ class ControllerResponsesExtensionChip extends AController
               }
             }
           }
-          $params['payment_method_whitelist'] = $payment_method_whitelist;
+          $params['payment_method_whitelist'] = $this->resolve_duitnow_methods(
+            $payment_method_whitelist,
+            $currency,
+            round( $order_total * 100 )
+          );
         }
 
         $chip = ChipApiCurl::get_instance($secret_key, $brand_id);
@@ -194,6 +202,70 @@ class ControllerResponsesExtensionChip extends AController
         $this->response->addJSONHeader();
         $this->response->setOutput(AJson::encode($payment));
     }
+
+  /**
+   * Resolve the configured payment_method_whitelist against the merchant's
+   * actual /payment_methods/ response, with dnqr-priority for the DuitNow QR group.
+   *
+   * Steps:
+   *   1. Group expansion: any dnqr-group member in the whitelist expands to the full group.
+   *   2. Cache key: brand + currency + amount-bucket (round to 100-sen steps).
+   *   3. Try cache. On miss, call /payment_methods/.
+   *   4. Fallback: return expanded whitelist unchanged if the API fails.
+   *   5. Intersect with available methods.
+   *   6. Priority: dnqr wins when both are present.
+   *   7. Build the final whitelist (original non-group entries + resolved group).
+   *
+   * @param array  $whitelist Configured payment_method_whitelist.
+   * @param string $currency  Order currency code (e.g. 'MYR').
+   * @param int    $amount    Order total in sen (e.g. 12345 = RM 123.45).
+   * @return array            Final whitelist to send to CHIP.
+   */
+  private function resolve_duitnow_methods( array $whitelist, $currency, $amount ) {
+    // 1. Group expansion.
+    $has_group_member = count( array_intersect( $whitelist, self::DUITNOW_GROUP ) ) > 0;
+
+    // Short-circuit: a whitelist that does not intersect the dnqr group
+    // must be returned untouched (no API call, no group injection).
+    if ( ! $has_group_member ) {
+      $this->resolved_dnqr_group = array();
+      return $whitelist;
+    }
+
+    $expanded = array_values( array_unique( array_merge( $whitelist, self::DUITNOW_GROUP ) ) );
+
+    // 2. Cache key: brand + currency + amount-bucket (round to 100-sen steps).
+    $brand_id = $this->config->get( 'chip_brand_id' );
+    $cache_key = 'chip_pm_' . md5( $brand_id . '|' . $currency . '|' . intval( $amount / 100 ) );
+
+    // 3. Try cache. If hit, use it. If miss, call /payment_methods/.
+    $available = $this->cache->get( $cache_key );
+    if ( $available === false ) {
+      $chip     = ChipApiCurl::get_instance( $this->config->get( 'chip_api_secret' ), $brand_id );
+      $response = $chip->payment_methods( $currency, $amount );
+      if ( ! is_array( $response ) || ! isset( $response['available_payment_methods'] ) ) {
+        // 4a. Fallback: return expanded whitelist unchanged.
+        $this->resolved_dnqr_group = $has_group_member ? self::DUITNOW_GROUP : array();
+        return $expanded;
+      }
+      $available = $response['available_payment_methods'];
+      $this->cache->set( $cache_key, $available, 1800 );
+    }
+
+    // 5. Intersect: keep only group members the merchant actually has.
+    $resolved_group = array_values( array_intersect( self::DUITNOW_GROUP, $available ) );
+
+    // 6. Priority: dnqr wins when both are present.
+    if ( in_array( 'dnqr', $resolved_group, true ) ) {
+      $resolved_group = array_values( array_diff( $resolved_group, array( 'duitnow_qr' ) ) );
+    }
+
+    // 7. Build final whitelist: original entries (with group members stripped) + resolved group.
+    $final = array_values( array_diff( $expanded, self::DUITNOW_GROUP ) );
+    $final = array_merge( $final, $resolved_group );
+
+    return $final;
+  }
 
   public function redirect_url() {
     if (!$this->request->is_GET()) {

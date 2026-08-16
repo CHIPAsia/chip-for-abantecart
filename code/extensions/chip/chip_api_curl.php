@@ -35,11 +35,11 @@ class ChipApiCurl
     return $this->call('POST', "/purchases/{$payment_id}/charge/", $params);
   }
 
-  public function payment_methods($currency)
+  public function payment_methods($currency, $amount = 200)
   {
     return $this->call(
       'GET',
-      "/payment_methods/?brand_id={$this->brand_id}&currency={$currency}&amount=200"
+      "/payment_methods/?brand_id={$this->brand_id}&currency={$currency}&amount={$amount}"
     );
   }
 

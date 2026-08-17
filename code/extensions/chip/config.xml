@@ -39,6 +39,7 @@
           <item>shopee_pay</item>
           <item>razer_tng</item>
           <item>duitnow_qr</item>
+          <item>crypto_coin</item>
         </variants>
         <default_value>2</default_value>
     </item>

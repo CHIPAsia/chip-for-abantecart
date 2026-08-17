@@ -3,8 +3,10 @@
 class ControllerResponsesExtensionChip extends AController
 {
     const DUITNOW_GROUP = array( 'duitnow_qr', 'dnqr' );
+    const SHOPEE_GROUP  = array( 'razer_shopeepay', 'shopee_pay' );
 
-    private $resolved_dnqr_group = array();
+    private $resolved_dnqr_group   = array();
+    private $resolved_shopee_group = array();
 
     public function main()
     {
@@ -170,7 +172,7 @@ class ControllerResponsesExtensionChip extends AController
               }
             }
           }
-          $params['payment_method_whitelist'] = $this->resolve_duitnow_methods(
+          $params['payment_method_whitelist'] = $this->resolve_payment_method_groups(
             $payment_method_whitelist,
             $currency,
             round( $order_total * 100 )
@@ -205,47 +207,56 @@ class ControllerResponsesExtensionChip extends AController
 
   /**
    * Resolve the configured payment_method_whitelist against the merchant's
-   * actual /payment_methods/ response, with dnqr-priority for the DuitNow QR group.
+   * actual /payment_methods/ response, with preferred-value resolution for
+   * the DuitNow QR group (dnqr) and the Shopee Pay group (shopee_pay).
    *
    * Steps:
-   *   1. Group expansion: any dnqr-group member in the whitelist expands to the full group.
+   *   1. Group expansion: any configured-group member in the whitelist
+   *      expands to the full group.
    *   2. Cache key: brand + currency + amount-bucket (round to 100-sen steps).
-   *   3. Try cache. On miss, call /payment_methods/.
+   *   3. Try cache. On miss, call /payment_methods/ (one call for all groups).
    *   4. Fallback: return expanded whitelist unchanged if the API fails.
    *   5. Intersect with available methods.
-   *   6. Priority: dnqr wins when both are present.
-   *   7. Build the final whitelist (original non-group entries + resolved group).
+   *   6. Priority: dnqr wins over duitnow_qr; shopee_pay wins over razer_shopeepay.
+   *   7. Build the final whitelist (original non-group entries + resolved groups).
    *
    * @param array  $whitelist Configured payment_method_whitelist.
    * @param string $currency  Order currency code (e.g. 'MYR').
    * @param int    $amount    Order total in sen (e.g. 12345 = RM 123.45).
    * @return array            Final whitelist to send to CHIP.
    */
-  private function resolve_duitnow_methods( array $whitelist, $currency, $amount ) {
-    // 1. Group expansion.
-    $has_group_member = count( array_intersect( $whitelist, self::DUITNOW_GROUP ) ) > 0;
+  private function resolve_payment_method_groups( array $whitelist, $currency, $amount ) {
+    // 1. Group expansion. Determine which configured groups are represented.
+    $has_group = array(
+      'dnqr' => count( array_intersect( $whitelist, self::DUITNOW_GROUP ) ) > 0,
+      'shopee' => count( array_intersect( $whitelist, self::SHOPEE_GROUP ) ) > 0,
+    );
 
-    // Short-circuit: a whitelist that does not intersect the dnqr group
-    // must be returned untouched (no API call, no group injection).
-    if ( ! $has_group_member ) {
-      $this->resolved_dnqr_group = array();
+    // Short-circuit: a whitelist that intersects neither group must be
+    // returned untouched (no API call, no group injection).
+    if ( ! $has_group['dnqr'] && ! $has_group['shopee'] ) {
+      $this->resolved_dnqr_group   = array();
+      $this->resolved_shopee_group = array();
       return $whitelist;
     }
 
-    $expanded = array_values( array_unique( array_merge( $whitelist, self::DUITNOW_GROUP ) ) );
+    $expanded = array_values( array_unique(
+      array_merge( $whitelist, self::DUITNOW_GROUP, self::SHOPEE_GROUP )
+    ) );
 
     // 2. Cache key: brand + currency + amount-bucket (round to 100-sen steps).
     $brand_id = $this->config->get( 'chip_brand_id' );
     $cache_key = 'chip_pm_' . md5( $brand_id . '|' . $currency . '|' . intval( $amount / 100 ) );
 
-    // 3. Try cache. If hit, use it. If miss, call /payment_methods/.
+    // 3. Try cache. If hit, use it. If miss, call /payment_methods/ (one call).
     $available = $this->cache->get( $cache_key );
     if ( $available === false ) {
       $chip     = ChipApiCurl::get_instance( $this->config->get( 'chip_api_secret' ), $brand_id );
       $response = $chip->payment_methods( $currency, $amount );
       if ( ! is_array( $response ) || ! isset( $response['available_payment_methods'] ) ) {
         // 4a. Fallback: return expanded whitelist unchanged.
-        $this->resolved_dnqr_group = $has_group_member ? self::DUITNOW_GROUP : array();
+        $this->resolved_dnqr_group   = $has_group['dnqr'] ? self::DUITNOW_GROUP : array();
+        $this->resolved_shopee_group = $has_group['shopee'] ? self::SHOPEE_GROUP : array();
         return $expanded;
       }
       $available = $response['available_payment_methods'];
@@ -253,16 +264,24 @@ class ControllerResponsesExtensionChip extends AController
     }
 
     // 5. Intersect: keep only group members the merchant actually has.
-    $resolved_group = array_values( array_intersect( self::DUITNOW_GROUP, $available ) );
+    $resolved_dnqr = array_values( array_intersect( self::DUITNOW_GROUP, $available ) );
+    $resolved_shopee = array_values( array_intersect( self::SHOPEE_GROUP, $available ) );
 
-    // 6. Priority: dnqr wins when both are present.
-    if ( in_array( 'dnqr', $resolved_group, true ) ) {
-      $resolved_group = array_values( array_diff( $resolved_group, array( 'duitnow_qr' ) ) );
+    // 6. Priority: dnqr wins over duitnow_qr; shopee_pay wins over razer_shopeepay.
+    if ( in_array( 'dnqr', $resolved_dnqr, true ) ) {
+      $resolved_dnqr = array_values( array_diff( $resolved_dnqr, array( 'duitnow_qr' ) ) );
+    }
+    if ( in_array( 'shopee_pay', $resolved_shopee, true ) ) {
+      $resolved_shopee = array_values( array_diff( $resolved_shopee, array( 'razer_shopeepay' ) ) );
     }
 
-    // 7. Build final whitelist: original entries (with group members stripped) + resolved group.
-    $final = array_values( array_diff( $expanded, self::DUITNOW_GROUP ) );
-    $final = array_merge( $final, $resolved_group );
+    $this->resolved_dnqr_group   = $resolved_dnqr;
+    $this->resolved_shopee_group = $resolved_shopee;
+
+    // 7. Build final whitelist: original entries (with group members stripped)
+    //    + resolved dnqr group + resolved shopee group.
+    $final = array_values( array_diff( $expanded, self::DUITNOW_GROUP, self::SHOPEE_GROUP ) );
+    $final = array_merge( $final, $resolved_dnqr, $resolved_shopee );
 
     return $final;
   }

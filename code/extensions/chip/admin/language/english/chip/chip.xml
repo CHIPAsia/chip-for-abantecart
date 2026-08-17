@@ -38,15 +38,15 @@
   </definition>
   <definition>
     <key>chip_payment_method_whitelist_razer_atome</key>
-    <value><![CDATA[Razer Atome]]></value>
+    <value><![CDATA[Atome]]></value>
   </definition>
   <definition>
     <key>chip_payment_method_whitelist_razer_grabpay</key>
-    <value><![CDATA[Razer GrabPay]]></value>
+    <value><![CDATA[GrabPay]]></value>
   </definition>
   <definition>
     <key>chip_payment_method_whitelist_razer_maybankqr</key>
-    <value><![CDATA[Razer MaybankQR]]></value>
+    <value><![CDATA[Maybank QR]]></value>
   </definition>
   <definition>
     <key>chip_payment_method_whitelist_shopee_pay</key>
@@ -54,7 +54,7 @@
   </definition>
   <definition>
     <key>chip_payment_method_whitelist_razer_tng</key>
-    <value><![CDATA[Razer TnG]]></value>
+    <value><![CDATA[Touch 'n Go]]></value>
   </definition>
   <definition>
     <key>chip_payment_method_whitelist_duitnow_qr</key>

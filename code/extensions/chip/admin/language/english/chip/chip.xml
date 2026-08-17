@@ -49,8 +49,8 @@
     <value><![CDATA[Razer MaybankQR]]></value>
   </definition>
   <definition>
-    <key>chip_payment_method_whitelist_razer_shopeepay</key>
-    <value><![CDATA[Razer Shopeepay]]></value>
+    <key>chip_payment_method_whitelist_shopee_pay</key>
+    <value><![CDATA[Shopee Pay]]></value>
   </definition>
   <definition>
     <key>chip_payment_method_whitelist_razer_tng</key>

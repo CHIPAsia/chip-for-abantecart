@@ -164,6 +164,12 @@ class ControllerResponsesExtensionChip extends AController
 
         if ( $pm_white != '0' ) {
           $payment_method_whitelist = unserialize($pm_white);
+          if ( in_array( 'razer_shopeepay', $payment_method_whitelist, true ) && !in_array( 'shopee_pay', $payment_method_whitelist, true ) ) {
+            $payment_method_whitelist = array_map(
+              function ( $pm ) { return $pm === 'razer_shopeepay' ? 'shopee_pay' : $pm; },
+              $payment_method_whitelist
+            );
+          }
           foreach ( ['razer_atome', 'razer_grabpay', 'razer_tng', 'razer_shopeepay','razer_maybankqr'] as $ewallet ) {
             if ( in_array($ewallet, $payment_method_whitelist ) ) {
               if ( !in_array( 'razer', $payment_method_whitelist ) ) {

@@ -170,14 +170,6 @@ class ControllerResponsesExtensionChip extends AController
               $payment_method_whitelist
             );
           }
-          foreach ( ['razer_atome', 'razer_grabpay', 'razer_tng', 'razer_shopeepay','razer_maybankqr'] as $ewallet ) {
-            if ( in_array($ewallet, $payment_method_whitelist ) ) {
-              if ( !in_array( 'razer', $payment_method_whitelist ) ) {
-                $payment_method_whitelist[]= 'razer';
-                break;
-              }
-            }
-          }
           $params['payment_method_whitelist'] = $this->resolve_payment_method_groups(
             $payment_method_whitelist,
             $currency,

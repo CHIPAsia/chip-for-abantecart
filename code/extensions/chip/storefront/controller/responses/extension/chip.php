@@ -255,7 +255,8 @@ class ControllerResponsesExtensionChip extends AController
     $cache_key = 'chip_pm_' . md5( $brand_id . '|' . $currency . '|' . intval( $amount / 100 ) );
 
     // 3. Try cache. If hit, use it. If miss, call /payment_methods/ (one call).
-    $available = $this->cache->get( $cache_key );
+    //    AbanteCart ACache exposes pull()/push() (TTL is global, not per-call).
+    $available = $this->cache->pull( $cache_key );
     if ( $available === false ) {
       $chip     = ChipApiCurl::get_instance( $this->config->get( 'chip_api_secret' ), $brand_id );
       $response = $chip->payment_methods( $currency, $amount );
@@ -266,7 +267,7 @@ class ControllerResponsesExtensionChip extends AController
         return $expanded;
       }
       $available = $response['available_payment_methods'];
-      $this->cache->set( $cache_key, $available, 1800 );
+      $this->cache->push( $cache_key, $available );
     }
 
     // 5. Intersect: keep only group members the merchant actually has.

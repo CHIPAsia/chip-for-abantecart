@@ -2,7 +2,7 @@
 <!-- https://abantecart.atlassian.net/wiki/spaces/DOC/pages/17956965/Extension+configuration+file -->
 <extension>
   <id>chip</id>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
   <cartversions>
     <item>1.4</item>
   </cartversions>
@@ -36,9 +36,10 @@
           <item>razer_atome</item>
           <item>razer_grabpay</item>
           <item>razer_maybankqr</item>
-          <item>razer_shopeepay</item>
+          <item>shopee_pay</item>
           <item>razer_tng</item>
           <item>duitnow_qr</item>
+          <item>crypto_coin</item>
         </variants>
         <default_value>2</default_value>
     </item>

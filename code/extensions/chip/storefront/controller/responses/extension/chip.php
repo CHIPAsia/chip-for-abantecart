@@ -261,18 +261,28 @@ class ControllerResponsesExtensionChip extends AController
       $chip     = ChipApiCurl::get_instance( $this->config->get( 'chip_api_secret' ), $brand_id );
       $response = $chip->payment_methods( $currency, $amount );
       if ( ! is_array( $response ) || ! isset( $response['available_payment_methods'] ) ) {
-        // 4a. Fallback: return expanded whitelist unchanged.
-        $this->resolved_dnqr_group   = $has_group['dnqr'] ? self::DUITNOW_GROUP : array();
-        $this->resolved_shopee_group = $has_group['shopee'] ? self::SHOPEE_GROUP : array();
-        return $expanded;
+        // 4a. Fallback: return the expanded whitelist restricted to the groups
+        //     the merchant actually selected (no cross-group injection).
+        $final = array_values( array_diff( $expanded,
+          $has_group['dnqr'] ? array() : self::DUITNOW_GROUP,
+          $has_group['shopee'] ? array() : self::SHOPEE_GROUP ) );
+        $this->resolved_dnqr_group   = array();
+        $this->resolved_shopee_group = array();
+        return $final;
       }
       $available = $response['available_payment_methods'];
       $this->cache->push( $cache_key, $available );
     }
 
-    // 5. Intersect: keep only group members the merchant actually has.
-    $resolved_dnqr = array_values( array_intersect( self::DUITNOW_GROUP, $available ) );
-    $resolved_shopee = array_values( array_intersect( self::SHOPEE_GROUP, $available ) );
+    // 5. Intersect: keep only group members the merchant actually has, AND only
+    //    for groups the merchant explicitly selected. A merchant who picked
+    //    fpx + shopee_pay must NOT get dnqr injected even if the brand has it.
+    $resolved_dnqr = $has_group['dnqr']
+      ? array_values( array_intersect( self::DUITNOW_GROUP, $available ) )
+      : array();
+    $resolved_shopee = $has_group['shopee']
+      ? array_values( array_intersect( self::SHOPEE_GROUP, $available ) )
+      : array();
 
     // 6. Priority: dnqr wins over duitnow_qr; shopee_pay wins over razer_shopeepay.
     if ( in_array( 'dnqr', $resolved_dnqr, true ) ) {

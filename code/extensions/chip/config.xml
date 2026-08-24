@@ -2,7 +2,7 @@
 <!-- https://abantecart.atlassian.net/wiki/spaces/DOC/pages/17956965/Extension+configuration+file -->
 <extension>
   <id>chip</id>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
   <cartversions>
     <item>1.4</item>
   </cartversions>
